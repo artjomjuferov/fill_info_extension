@@ -87,7 +87,6 @@ function findLocalItems(query) {
 
 
 var changeLabelToUpdateInfo = function(user) {
-
   $('#updateUserInfo').text('Update user: ' + user.name + ' '+ user.surname).data('state', 'update')
 };
 

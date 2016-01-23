@@ -1,13 +1,11 @@
 var INPUT_LABELS = ['name', 'surname', 'password', 'email', 'address'];
 
 chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
-  console.log(message.user);
-  console.log("here");
   if(message.action == "enterFillingMode")
   {
-    console.log("Here");
     if (message.status === "ok"){
-
+      init(message.user);
+      alert("Auto-filling finished please check if it's correct");
     }else{
       alert("Go to options and choose user");
     }
@@ -15,6 +13,16 @@ chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
   return true;
 });
 
+
+var tryFindElement = function(queries) {
+  for (var i = 0; i < queries.length; i++) {
+    query = queries[i];
+    var el = $("input[" + query + "]");
+    if (el.length !== 0){
+      return el;
+    }
+  }
+};
 
 var findNameInput = function() {
   var queries = [
@@ -29,15 +37,6 @@ var findNameInput = function() {
   return tryFindElement(queries);
 };
 
-var tryFindElement = function(queries) {
-  for (var i = 0; i < queries.length; i++) {
-    query = queries[i];
-    var el = $("input[" + query + "]");
-    if (el.length !== 0){
-      return el;
-    }
-  }
-};
 
 
 var findSurnameInput = function() {
@@ -101,12 +100,10 @@ var makePrediction = function(user) {
 };
 
 
-
-var init = function(user) {
+init = function(user) {
   makePrediction(user);
 
   self = this;
-
 
   $('input').click(function(e) {
     if (!e.ctrlKey)
@@ -124,8 +121,6 @@ var init = function(user) {
     }
   });
 };
-init({name:"artjom", surname:"juferov"});
-
 
 showSelection = function(user, inputEl) {
   $('<div/>', {
