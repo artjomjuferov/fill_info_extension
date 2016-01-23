@@ -1,16 +1,21 @@
 var INPUT_LABELS = ['name', 'surname', 'password', 'email', 'address'];
 
-chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
-  if(message.action == "enterFillingMode")
-  {
-    if (message.status === "ok"){
-      init(message.user);
-      alert("Auto-filling finished please check if it's correct");
-    }else{
-      alert("Go to options and choose user");
-    }
+
+$(document).on("keypress", function(e) {
+  if( e.which === 12){
+    chrome.runtime.sendMessage({action: "getCurrentUser"}, function(response) {
+      if(response.action == "getCurrentUserResponse")
+      {
+        if (response.status === "ok"){
+          init(response.user);
+          alert("Auto-filling finished please check if it's correct");
+        }else{
+          alert("Go to options and choose user");
+        }
+      }
+      return true;
+    });
   }
-  return true;
 });
 
 
